@@ -1,0 +1,148 @@
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(53, 9, 9);
+  color: white;
+  scroll-behavior: smooth;
+}
+
+.header {
+  position: fixed;
+  background-color: #131416;
+  font-size: 35px;
+  color: white;
+  z-index: 100;
+}
+.footer {
+  position: fixed;
+  bottom: 0;
+  z-index: 100;
+  padding: 0.3% 0;
+}
+#fire {
+  font-size: 20px;
+}
+.card {
+  border-radius: 34px;
+}
+.card:hover {
+  background-color: #fff !important;
+  color: black !important;
+}
+.card-img-top {
+  height: 400px;
+  border-radius: 34px;
+}
+.button,
+.buttons {
+  border-radius: 34px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none !important;
+}
+.button:hover,
+.buttons {
+  background-color: darkblue !important;
+}
+.search {
+  padding: 0 2%;
+  text-transform: capitalize;
+}
+.search::placeholder {
+  font-weight: bold;
+  color: grey;
+  font-size: 20px;
+  padding: 0 2%;
+}
+a:hover {
+  color: white;
+}
+
+/*                    Respomsive                      */
+/*                    FOR MOBILE                      */
+@media (min-width: 300px) and (max-width: 576px) {
+  .header {
+    font-size: 25px;
+  }
+  .header1 {
+    display: none;
+  }
+  #card {
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: center;
+    width: 45%;
+    padding: 0;
+    margin-left: 3%;
+  }
+  .card {
+    margin: 0 3%;
+    height: 100%;
+  }
+  .card-img-top {
+    height: 70%;
+    width: 100%;
+  }
+  .card-title {
+    font-size: 18px !important;
+  }
+  .movie {
+    font-size: 13px !important;
+  }
+  .button,
+  .buttons {
+    font-size: 12px;
+  }
+  .footer1 {
+    font-size: 14px;
+  }
+}
+
+/*                            FOR TABLET                  */
+@media (min-width: 576px) and (max-width: 768px) {
+  .card-img-top {
+    height: 70%;
+    width: 100%;
+  }
+  .card-title {
+    font-size: 15px !important;
+  }
+  .movie {
+    font-size: 13px !important;
+  }
+  .button,
+  .buttons {
+    font-size: 12px;
+  }
+  .header {
+    display: none;
+  }
+  .footer {
+    font-size: 14px;
+  }
+}
+/*                            FOR DESKTOP                  */
+@media (min-width: 768px) and (max-width: 980px) {
+  .card-img-top {
+    height: 10%;
+    width: 100%;
+  }
+  .card-title {
+    font-size: 15px !important;
+  }
+  .movie {
+    font-size: 13px !important;
+  }
+  .button,
+  .buttons {
+    font-size: 12px;
+  }
+  .header {
+    display: none;
+  }
+  .footer {
+    font-size: 14px;
+  }
+}
