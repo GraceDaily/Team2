@@ -27,6 +27,12 @@ const Footer = () => {
       link: "/search",
       id: 4,
     },
+    {
+      icon: "fa-solid fa-book-bookmark",
+      name: "Library",
+      link: "/Library",
+      id: 5,
+    },
   ];
   
   return (
