@@ -22,17 +22,18 @@ const Footer = () => {
       id: 3,
     },
     {
-      icon: "fas fa-search",
-      name: "Search",
-      link: "/search",
+      icon: "fa-solid fa-book-bookmark",
+      name: "Library",
+      link: "/library",
       id: 4,
     },
     {
-      icon: "fa-solid fa-book-bookmark",
-      name: "Library",
-      link: "/Library",
+      icon: "fas fa-search",
+      name: "Search",
+      link: "/search",
       id: 5,
     },
+    
   ];
   
   return (
