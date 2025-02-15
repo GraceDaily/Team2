@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Trending from "./Pages/Trending";
 import Movies from "./Pages/Movies";
 import TV from "./Pages/TV";
+import Library from "./Pages/Library";
 import Search from "./Pages/Search";
 import Error from "./Pages/Error";
 const App = () => {
@@ -16,6 +17,7 @@ const App = () => {
           <Route path="/" element={<Trending />} exact />
           <Route path="/movies" element={<Movies />} />
           <Route path="/tv" element={<TV />} />
+          <Route path="/library" element={<Library />} />
           <Route path="/search" element={<Search />} />
           <Route path="*" element={<Error />} />
         </Routes>

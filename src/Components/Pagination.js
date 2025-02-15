@@ -20,13 +20,13 @@ const Pagination = ({page, setPage}) => {
     <>
       <div className="my-3 d-flex justify-content-between align-items-center">
         <button
-          className="px-3 py-1 m-1 text-center btn-primary"
+          className="px-3 py-1 m-1 text-center btn-danger"
           onClick={Previous}
         >
           Previous
         </button>
         <button
-          className="px-3 py-1 m-1 text-center btn-primary"
+          className="px-3 py-1 m-1 text-center btn-danger"
           onClick={Next}
         >
           Next
