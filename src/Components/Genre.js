@@ -7,7 +7,56 @@ const Genre = ({ genre, setGenre, setPage, type, value, setValue }) => {
     );
     const { genres } = await data.json();
     console.log(genres);
-    setGenre(genres);
+
+    const renamedGenres = genres.map(genre => {
+      switch (genre.name) {
+        case 'Animation':
+          return { ...genre, name: 'Animation 🎨'};
+        case 'Comedy':
+          return {...genre, name: 'Comedy 🤣'};
+        case 'Crime':
+          return {...genre, name: 'Crime 🔪'};
+        case 'Documentary':
+          return {...genre, name: 'Documentary 🎥'};
+        case 'Action':
+          return {...genre, name: 'Action 💥'};
+        case 'Adventure':
+          return {...genre, name: 'Adventure 🏞️'};
+        case 'Drama':
+          return {...genre, name: 'Drama 🎭'};
+        case 'Family':
+          return {...genre, name: 'Family 👨‍👩‍👧‍👦'};
+        case 'Fantasy':
+          return {...genre, name: 'Fantasy 🧚'};
+        case 'History':
+          return {...genre, name: 'History 📜'};
+        case 'Horror':
+          return {...genre, name: 'Horror 👻'};
+        case 'Music':
+          return {...genre, name: 'Music 🎵'};
+        case 'Mystery':
+          return {...genre, name: 'Mystery 🕵️‍♂️'};
+        case 'Romance':
+          return {...genre, name: 'Romance ♥️'};
+        case 'Science Fiction':
+          return {...genre, name: 'Science Fiction 🛸'};
+        case 'TV Movie':
+          return {...genre, name: 'TV Movie 📺'};
+        case 'Thriller':
+          return {...genre, name: 'Thriller 😱'};
+        case 'War':
+          return {...genre, name: 'War ⚔️'};
+        case 'Western':
+          return {...genre, name: 'Western 🤠'};
+        default: 
+        return genre;
+      }
+    });
+
+
+
+
+    setGenre(renamedGenres);
   };
 
   useEffect(() => {
