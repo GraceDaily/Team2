@@ -48,7 +48,23 @@ const Genre = ({ genre, setGenre, setPage, type, value, setValue }) => {
           return {...genre, name: 'War ⚔️'};
         case 'Western':
           return {...genre, name: 'Western 🤠'};
-        default: 
+          case 'Action & Adventure':
+            return {...genre, name: 'Action & Adventure 💥🏞️'};
+          case 'Kids':
+            return {...genre, name: 'Kids 👶'};
+          case 'News':
+            return {...genre, name: 'News 📰'};
+          case 'Reality':
+            return {...genre, name: 'Reality 🎥'};
+          case'Sci-Fi & Fantasy':
+            return {...genre, name: 'Sci-Fi & Fantasy 🛸🧚'};
+          case 'Soap':
+            return {...genre, name: 'Soap🎶'};
+          case 'Talk':
+            return {...genre, name: 'Talk 🎤'};
+          case 'War & Politics':
+            return {...genre, name: 'War & Politics ⚔️🏛️'};
+          default: 
         return genre;
       }
     });
