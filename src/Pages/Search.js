@@ -38,7 +38,7 @@ const Search = () => {
               className="form-control-lg col-6 search bg-dark text-white border border-0"
             />
             <button
-              className="btn btn-primary text-white mx-2 col-md-1 col-sm-2 py-2"
+              className="btn btn-danger text-white mx-2 col-md-1 col-sm-2 py-2"
               onClick={Search}
             >
               <i className="fas fa-search"></i>
