@@ -28,7 +28,7 @@ const Footer = () => {
       id: 4,
     },
     {
-      icon: "fa-solid fa-book-bookmark",
+      icon: "fa-solid fa-heart",
       name: "MovieSwipe",
       link: "/movieswipe",
       id: 5,
