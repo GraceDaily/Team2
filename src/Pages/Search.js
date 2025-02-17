@@ -61,6 +61,8 @@ const Search = () => {
             >
               <i className="fas fa-search"></i>
             </button>
+            </div>
+            <div className = "d-flex flex-column">
             <Genre
             genre={genre}
             setGenre={setGenre}
@@ -69,6 +71,7 @@ const Search = () => {
             value={value}
             setValue={setValue}
           />
+          
           </div>
           {content &&
             content.map((Val) => {
