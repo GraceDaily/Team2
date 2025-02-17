@@ -6,6 +6,7 @@ import Trending from "./Pages/Trending";
 import Movies from "./Pages/Movies";
 import TV from "./Pages/TV";
 import Library from "./Pages/Library";
+import MovieSwpie from "./Pages/MovieSwpie";
 import Search from "./Pages/Search";
 import Error from "./Pages/Error";
 const App = () => {
@@ -18,6 +19,7 @@ const App = () => {
           <Route path="/movies" element={<Movies />} />
           <Route path="/tv" element={<TV />} />
           <Route path="/library" element={<Library />} />
+          <Route path="/movieswipe" element={<MovieSwpie />} />
           <Route path="/search" element={<Search />} />
           <Route path="*" element={<Error />} />
         </Routes>
