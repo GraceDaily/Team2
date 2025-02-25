@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Pagination from "../Components/Pagination";
 import { img_300, unavailable } from "../Components/config";
+const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
+
+
 
 const Search = () => {
   const [searchText, setSearchText] = useState("");
