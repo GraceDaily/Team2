@@ -28,10 +28,16 @@ const Footer = () => {
       id: 4,
     },
     {
+      icon: "fa-solid fa-heart",
+      name: "MovieSwipe",
+      link: "/movieswipe",
+      id: 5,
+    },
+    {
       icon: "fas fa-search",
       name: "Search",
       link: "/search",
-      id: 5,
+      id: 6,
     },
     
   ];
