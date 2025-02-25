@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
+const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
 
 const AppContext = createContext();
 
@@ -8,7 +9,7 @@ const AppProvider = ({ children, media_type, id }) => {
 
   const fetchData = async () => {
     const Data = await fetch(
-      `https://api.themoviedb.org/3/${media_type}/${id}?api_key=7d5c6dc341e5626ee3c5ab2d8d62ad77&language=en-US`
+      `https://api.themoviedb.org/3/${media_type}/${id}?api_key=${API_KEY}&language=en-US`
     );
     const DataJ = await Data.json();
     // console.log(values);
@@ -17,7 +18,7 @@ const AppProvider = ({ children, media_type, id }) => {
 
   const fetchVideo = async () => {
     const ytvideo = await fetch(
-      `https://api.themoviedb.org/3/${media_type}/${id}/videos?api_key=7d5c6dc341e5626ee3c5ab2d8d62ad77&language=en-US`
+      `https://api.themoviedb.org/3/${media_type}/${id}/videos?api_key=${API_KEY}&language=en-US`
     );
     const YTvideo = await ytvideo.json();
     console.log(YTvideo.results[0]);
@@ -34,9 +35,6 @@ const AppProvider = ({ children, media_type, id }) => {
     <AppContext.Provider value={{ video }}>{children}</AppContext.Provider>
   );
 };
-//Global Custom Hook
-// const useGlobalContext = () => {
-//   return useContext(AppContext);
-// };
+
 
 export { AppContext, AppProvider };

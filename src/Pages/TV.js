@@ -3,6 +3,9 @@ import { img_300, unavailable } from "../Components/config";
 import Pagination from "../Components/Pagination";
 import Genre from "../Components/Genre";
 import useGenre from "../useGenre";
+const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
+
+
 const TV = () => {
   const [state, setState] = useState([]);
   const [page, setPage] = useState(1);
@@ -12,7 +15,7 @@ const TV = () => {
 
   const fetchTrending = async () => {
     const data = await fetch(`
-    https://api.themoviedb.org/3/discover/tv?api_key=7d5c6dc341e5626ee3c5ab2d8d62ad77&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreURL}`);
+    https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreURL}`);
     const dataJ = await data.json();
     setState(dataJ.results);
   };

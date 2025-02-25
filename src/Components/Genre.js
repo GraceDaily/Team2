@@ -1,9 +1,13 @@
 import React, { useEffect } from "react";
+const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
 
+
+
+      
 const Genre = ({ genre, setGenre, setPage, type, value, setValue }) => {
   const fetchGenre = async () => {
     const data = await fetch(
-      `https://api.themoviedb.org/3/genre/${type}/list?api_key=7d5c6dc341e5626ee3c5ab2d8d62ad77&language=en-US`
+      `https://api.themoviedb.org/3/genre/${type}/list?api_key=${API_KEY}&language=en-US`
     );
     const { genres } = await data.json();
     console.log(genres);
@@ -65,7 +69,7 @@ const Genre = ({ genre, setGenre, setPage, type, value, setValue }) => {
           case 'War & Politics':
             return {...genre, name: 'War & Politics ⚔️🏛️'};
           default: 
-        return genre;
+        return genre; //if no match, return the genre name as is
       }
     });
 

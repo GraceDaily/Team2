@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import { img_300, unavailable } from "../Components/config";
 // import { AppProvider } from "../Components/context";
 import Pagination from "../Components/Pagination";
+const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
+
 
 const Trending = () => {
   const [state, setState] = useState([]);
@@ -10,7 +12,7 @@ const Trending = () => {
 
   const fetchTrending = async () => {
     const data = await fetch(`
-    https://api.themoviedb.org/3/trending/all/day?api_key=7d5c6dc341e5626ee3c5ab2d8d62ad77&page=${page}`);
+    https://api.themoviedb.org/3/trending/all/day?api_key=${API_KEY}&page=${page}`);
     const dataJ = await data.json();
     // console.log(dataJ.results);
     setState(dataJ.results);

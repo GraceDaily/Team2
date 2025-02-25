@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Pagination from "../Components/Pagination";
 import { img_300, unavailable } from "../Components/config";
+const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
+
 
 const Search = () => {
   const [searchText, setSearchText] = useState("");
@@ -9,7 +11,7 @@ const Search = () => {
 
   const fetchSearch = async () => {
     const data = await fetch(
-      `https://api.themoviedb.org/3/search/multi?api_key=7d5c6dc341e5626ee3c5ab2d8d62ad77&language=en-US&query=${searchText}&page=${page}&include_adult=false`
+      `https://api.themoviedb.org/3/search/multi?api_key=${API_KEY}&language=en-US&query=${searchText}&page=${page}&include_adult=false`
     );
     const { results } = await data.json();
     setContent(results);
