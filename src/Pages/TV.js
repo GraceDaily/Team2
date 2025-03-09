@@ -14,6 +14,7 @@ const TV = () => {
   const [value, setValue] = useState([]);
   const { addToLibrary } = useContext(LibraryContext); // Use the context
   const genreURL = useGenre(value);
+  const [addedToLibrary, setAddedToLibrary] = useState(null); // State to manage the added message
 
   const fetchTrending = async () => {
     const data = await fetch(`
@@ -25,6 +26,12 @@ const TV = () => {
   useEffect(() => {
     fetchTrending();
   }, [page, genreURL]);
+
+  const handleAddToLibrary = (movie) => {
+    addToLibrary(movie);
+    setAddedToLibrary(movie.id); // Set the added movie ID
+    setTimeout(() => setAddedToLibrary(null), 2000); // Clear the message after 2 seconds
+  };
 
   return (
     <>
@@ -71,10 +78,13 @@ const TV = () => {
                     </div>
                     <button
                       className="btn btn-primary mt-3"
-                      onClick={() => addToLibrary(Val)}
+                      onClick={() => handleAddToLibrary(Val)}
                     >
                       Add to Library
                     </button>
+                    {addedToLibrary === id && (
+                      <div className="text-success mt-2">Added to Library</div>
+                    )}
                   </div>
                 </div>
               </div>
