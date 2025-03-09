@@ -3,10 +3,13 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import { AppProvider } from "./Components/context";
+import { LibraryProvider } from './Components/LibraryContext';
 
 ReactDOM.render(
-  <AppProvider>
+  <LibraryProvider>
+    <AppProvider>
       <App />
-  </AppProvider>,
+    </AppProvider>
+  </LibraryProvider>,
   document.getElementById("root")
 );

@@ -123,6 +123,18 @@ a:hover {
     font-size: 14px;
   }
 }
+
+.btn-primary {
+  background-color: #3e556d;
+  border-color: #3f4e5d;
+  color: white;
+
+}
+
+.btn-primary:hover {
+  background-color: #2872c2;
+  border-color: #004085;
+}
 /*                            FOR DESKTOP                  */
 @media (min-width: 768px) and (max-width: 980px) {
   .card-img-top {

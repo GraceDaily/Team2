@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { img_300, unavailable } from "../Components/config";
 import Pagination from "../Components/Pagination";
 import Genre from "../Components/Genre";
 import useGenre from "../useGenre";
-const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
+import { LibraryContext } from "../Components/LibraryContext";
 
+const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
 
 const TV = () => {
   const [state, setState] = useState([]);
   const [page, setPage] = useState(1);
   const [genre, setGenre] = useState([]);
   const [value, setValue] = useState([]);
+  const { addToLibrary } = useContext(LibraryContext); // Use the context
   const genreURL = useGenre(value);
 
   const fetchTrending = async () => {
@@ -19,6 +21,7 @@ const TV = () => {
     const dataJ = await data.json();
     setState(dataJ.results);
   };
+
   useEffect(() => {
     fetchTrending();
   }, [page, genreURL]);
@@ -49,28 +52,32 @@ const TV = () => {
               id,
             } = Val;
             return (
-              <>
-                <div className="col-md-3 col-sm-4 py-3" id="card" key={id}>
-                  <div className="card bg-dark" key={id}>
-                    <img
-                      src={
-                        poster_path ? `${img_300}/${poster_path}` : unavailable
-                      }
-                      className="card-img-top pt-3 pb-0 px-3"
-                      alt={title || name}
-                    />
-                    <div className="card-body">
-                      <h5 className="card-title text-center fs-5">
-                        {title || name}
-                      </h5>
-                      <div className="d-flex fs-6 align-items-center justify-content-evenly movie">
-                        <div>{media_type === "movie" ? "Movie" : "TV"}</div>
-                        <div>{first_air_date || release_date}</div>
-                      </div>
+              <div className="col-md-3 col-sm-4 py-3" id="card" key={id}>
+                <div className="card bg-dark">
+                  <img
+                    src={
+                      poster_path ? `${img_300}/${poster_path}` : unavailable
+                    }
+                    className="card-img-top pt-3 pb-0 px-3"
+                    alt={title || name}
+                  />
+                  <div className="card-body">
+                    <h5 className="card-title text-center fs-5">
+                      {title || name}
+                    </h5>
+                    <div className="d-flex fs-6 align-items-center justify-content-evenly movie">
+                      <div>{media_type === "movie" ? "Movie" : "TV"}</div>
+                      <div>{first_air_date || release_date}</div>
                     </div>
+                    <button
+                      className="btn btn-primary mt-3"
+                      onClick={() => addToLibrary(Val)}
+                    >
+                      Add to Library
+                    </button>
                   </div>
                 </div>
-              </>
+              </div>
             );
           })}
           <Pagination page={page} setPage={setPage} />
