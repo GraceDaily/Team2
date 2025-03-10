@@ -9,6 +9,7 @@ const Trending = () => {
   const [state, setState] = useState([]);
   const [page, setPage] = useState(1); // initialised the page state with the initial value of 1
   const { addToLibrary } = useContext(LibraryContext); // Use the context
+  const [addedToLibrary, setAddedToLibrary] = useState(null); // State to manage the added message
 
   const fetchTrending = async () => {
     const data = await fetch(`
@@ -20,6 +21,12 @@ const Trending = () => {
   useEffect(() => {
     fetchTrending();
   }, [page]);
+
+  const handleAddToLibrary = (movie) => {
+    addToLibrary(movie);
+    setAddedToLibrary(movie.id); // Set the added movie ID
+    setTimeout(() => setAddedToLibrary(null), 2000); // Clear the message after 2 seconds
+  };
 
   return (
     <>
@@ -62,10 +69,13 @@ const Trending = () => {
                     </div>
                     <button
                       className="btn btn-primary mt-3"
-                      onClick={() => addToLibrary(Val)}
+                      onClick={() => handleAddToLibrary(Val)}
                     >
                       Add to Library
                     </button>
+                    {addedToLibrary === id && (
+                      <div className="text-success mt-2">Added to Library</div>
+                    )}
                   </div>
                 </div>
               </div>

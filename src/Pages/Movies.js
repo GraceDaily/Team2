@@ -11,6 +11,8 @@ const Movies = () => {
   const [page, setPage] = useState(1); //keep a track of the page numbers
   const [genre, setGenre] = useState([]); //used to store the original genre values
   const [value, setValue] = useState([]); //used to store the selected genre values
+  const [addedToLibrary, setAddedToLibrary] = useState(null); // State to manage the added message
+  
   const genreURL = useGenre(value);
   const { addToLibrary } = useContext(LibraryContext); // Use the context
 
@@ -24,6 +26,12 @@ const Movies = () => {
   useEffect(() => {
     fetchTrending();
   }, [page, genreURL]);
+
+  const handleAddToLibrary = (movie) => {
+    addToLibrary(movie);
+    setAddedToLibrary(movie.id); // Set the added movie ID
+    setTimeout(() => setAddedToLibrary(null), 2000); // Clear the message after 2 seconds
+  };
 
   return (
     <>
@@ -70,10 +78,13 @@ const Movies = () => {
                     </div>
                     <button
                       className="btn btn-primary mt-3"
-                      onClick={() => addToLibrary(Val)}
+                      onClick={() => handleAddToLibrary(Val)}
                     >
                       Add to Library
                     </button>
+                    {addedToLibrary === id && (
+                      <div className="text-success mt-2">Added to Library</div>
+                    )}
                   </div>
                 </div>
               </div>
