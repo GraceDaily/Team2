@@ -22,13 +22,17 @@ const MovieSwpie = () =>
   
   const fetchTrending = useCallback(async () => 
     {
-    const data = await fetch(`
+    const data1 = await fetch(`
     https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&include_adult=false&include_video=false&with_genres=${genreURL}`);
-    const dataJ = await data.json();
-    setState(dataJ.results);
+    const data2 = await fetch(`
+    https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&language=en-US&include_adult=false&include_video=false&with_genres=${genreURL}`)
+    const dataJ = await data1.json();
+    const dataK = await data2.json();
+    const data = [...(dataJ.results || []), ...(dataK.results || [])];
+    setState(data);
 
-    if (dataJ.results.length > 0) {
-      setRandomIndex(Math.floor(Math.random() * dataJ.results.length));
+    if (data.results.length > 0) {
+      setRandomIndex(Math.floor(Math.random() * data.results.length));
     }
   }, [genreURL]);
 
@@ -55,7 +59,7 @@ const MovieSwpie = () =>
                 MovieSwipe
               </div>
 
-              <div className = "col-12 mb-4 d-flex justify-content-center align-items-center">
+              <div className = "col-12 mb-4 d-flex justify-content-center align-items-center gap-4">
               <button
                       className="btn btn-primary mt-3"
                       onClick={() => handleAddToLibrary(randomMovie)}
