@@ -90,10 +90,15 @@ const MovieSwpie = () => {
                     <div className="d-flex fs-6 align-items-center justify-content-evenly movie">
                       <div>{randomMovie.media_type === "tv" ? "TV Series" : "Movie"}</div>
                       <div>{randomMovie.first_air_date || randomMovie.release_date}</div>
-                      {addedToLibrary === randomMovie.id && (
-                        <div className="text-success mt-2">Added to Library</div>
-                      )}
                     </div>
+                    {/* "Added to Library" message */}
+                    {addedToLibrary === randomMovie.id && (
+                      <div className="text-success mt-2 text-center">Added to Library</div>
+                    )}
+                    {/* Display the overview (left-justified) */}
+                    <p className="mt-3 px-3 text-start">
+                      {randomMovie.overview || "No overview available."}
+                    </p>
                   </div>
                 </div>
               </div>
