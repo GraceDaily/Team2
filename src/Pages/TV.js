@@ -76,15 +76,18 @@ const TV = () => {
                       <div>{media_type === "movie" ? "Movie" : "TV"}</div>
                       <div>{first_air_date || release_date}</div>
                     </div>
-                    <button
-                      className="btn btn-primary mt-3"
-                      onClick={() => handleAddToLibrary(Val)}
-                    >
-                      Add to Library
-                    </button>
-                    {addedToLibrary === id && (
-                      <div className="text-success mt-2">Added to Library</div>
-                    )}
+                    {/* Centered Button and Added Message */}
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '10px' }}>
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => handleAddToLibrary(Val)}
+                      >
+                        Add to Library
+                      </button>
+                      {addedToLibrary === id && (
+                        <div className="text-success mt-2">Added to Library</div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
