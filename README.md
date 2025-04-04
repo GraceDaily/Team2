@@ -1,4 +1,8 @@
 
+## The BingeSpot Website
+
+Open [The BingeSpot](https://team2-gamma.vercel.app/) to start browing movies and tv shows.
+
 ## Available Scripts
 
 In the project directory, you can run:
