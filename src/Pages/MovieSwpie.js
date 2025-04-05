@@ -12,6 +12,7 @@ const MovieSwpie = () => {
   const [value, setValue] = useState([]);
   const [addedToLibrary, setAddedToLibrary] = useState(null);
   const [cast, setCast] = useState([]);
+  const [trailerKey, setTrailerKey] = useState(null);
 
   const [randomIndex, setRandomIndex] = useState(null);
   const [displayedIndexes, setDisplayedIndex] = useState([]);
@@ -68,6 +69,23 @@ const MovieSwpie = () => {
     }
   };
 
+  const fetchTrailer = async (media) => {
+    const type = media.media_type || "movie"; // "movie" or "tv"
+    const url = `https://api.themoviedb.org/3/${type}/${media.id}/videos?api_key=${API_KEY}`;
+  
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      const trailer = data.results.find(
+        (vid) => vid.type === "Trailer" && vid.site === "YouTube"
+      );
+      setTrailerKey(trailer ? trailer.key : null);
+    } catch (err) {
+      console.error("Error fetching trailer:", err);
+      setTrailerKey(null);
+    }
+  };  
+
   const shuffleMovie = () => {
     if (state.length === 0) return;
 
@@ -91,6 +109,7 @@ const MovieSwpie = () => {
   useEffect(() => {
     if (randomMovie) {
       fetchCast(randomMovie.id);
+      fetchTrailer(randomMovie);
     }
   }, [randomMovie]);
 
@@ -151,17 +170,35 @@ const MovieSwpie = () => {
                         ))}
                       </ul>
                     ) : (
-                      <p>No cast information available.</p>
+                      <p className="text-muted mt-2">No cast information available.</p>
                     )}
                   </div>
 
                   {addedToLibrary === randomMovie.id && (
                     <div className="text-success mt-2 text-center">Added to Library</div>
                   )}
-
                   <p className="mt-3 px-3 text-start">
-                    <strong>Overview:</strong> {randomMovie.overview || "No overview available."}
+                    <strong>Overview: </strong> 
+                      <span className={randomMovie.overview ? "" : "text-muted"}>
+                      {randomMovie.overview || "No overview available."}
+                      </span>
                   </p>
+                  <div className="text-center mt-4">
+                    <strong className="fs-6">Trailer</strong>
+                    </div>
+
+                    {trailerKey ? (
+                      <div className="ratio ratio-16x9 my-3 px-3">
+                      <iframe
+                        src={`https://www.youtube.com/embed/${trailerKey}`}
+                        title="YouTube Trailer"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      ></iframe>
+                      </div>
+                      ) : (
+                      <p className="text-center text-muted mt-2">No trailer available.</p>
+                      )}
                 </div>
               </div>
             </div>
