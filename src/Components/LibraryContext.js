@@ -1,9 +1,13 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useEffect } from "react";
 
 export const LibraryContext = createContext();
 
 export const LibraryProvider = ({ children }) => {
-  const [library, setLibrary] = useState([]);
+  const [library, setLibrary] = useState(() => {
+    const savedLibrary = localStorage.getItem("library");
+    return savedLibrary ? JSON.parse(savedLibrary) : [];
+  });
+
   const [alreadyAdded, setAlreadyAdded] = useState(null); // State to manage the "Already added" message
 
   const addToLibrary = (movie) => {
@@ -18,6 +22,11 @@ export const LibraryProvider = ({ children }) => {
       return [...prevLibrary, movie]; // Add the movie if it doesn't exist in the library
     });
   };
+
+  // Save library user data using localStorage
+  useEffect(() => {
+    localStorage.setItem("library", JSON.stringify(library));
+  }, [library]);
 
   return (
     <LibraryContext.Provider value={{ library, addToLibrary, alreadyAdded }}>
