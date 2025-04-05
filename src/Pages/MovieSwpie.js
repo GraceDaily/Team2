@@ -8,6 +8,7 @@ const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
 
 const MovieSwpie = () => {
   const [state, setState] = useState([]);
+  //const [page, setPage] = useState(1); //keep a track of the page numbers
   const [genre, setGenre] = useState([]); //used to store the original genre values
   const [addedToLibrary, setAddedToLibrary] = useState(null);
   const [value, setValue] = useState([]); //used to store the selected genre values
@@ -15,23 +16,42 @@ const MovieSwpie = () => {
   const genreURL = useGenre(value);
   const { addToLibrary } = useContext(LibraryContext);
 
+  //used to get a random movie
   const [randomIndex, setRandomIndex] = useState(null);
+  //used to make sure that once a user has been suggested a movie they will not be suggested it again
+  const [displayedIndexes, setDisplayedIndex] = useState([]);
 
   // Fetch movies and set a random index when the component mounts
   const fetchTrending = useCallback(async () => {
-    const data1 = await fetch(
-      `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&include_adult=false&include_video=false&with_genres=${genreURL}`
-    );
-    const data2 = await fetch(
-      `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&language=en-US&include_adult=false&include_video=false&with_genres=${genreURL}`
-    );
-    const dataJ = await data1.json();
-    const dataK = await data2.json();
-    const data = [...(dataJ.results || []), ...(dataK.results || [])];
-    setState(data);
-    // Set a random index when data is fetched
-    if (data.length > 0) {
-      setRandomIndex(Math.floor(Math.random() * (data.length-1)));
+    const getData = async(type, page = 1) => {
+    const data = await fetch(`
+      https://api.themoviedb.org/3/discover/${type}?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreURL}`);
+      const dataJ = await data.json();
+      return dataJ.results || []; 
+    };
+
+    //need to load in multiple pages of data so there are many suggestion to pull from
+    const [movie1, movie2, movie3, movie4, movie5, tv1,tv2,tv3,tv4,tv5] = await Promise.all ([
+      getData("movie",1),
+      getData("movie",2),
+      getData("movie",3),
+      getData("movie",4),
+      getData("movie",5),
+      getData("tv",1),
+      getData("tv",2),
+      getData("tv",3),
+      getData("tv",4),
+      getData("tv",5),
+    ]);
+    const mediaData = [...movie1,...movie2,...movie3,...movie4,...movie5,...tv1,...tv2,...tv3,...tv4,...tv5];
+    setState(mediaData);
+    setDisplayedIndex([]);
+
+    // Set first random index when data is fetched
+    if (mediaData.length > 0) {
+      const index1 = (Math.floor(Math.random() * (mediaData.length)));
+      setRandomIndex(index1);
+      setDisplayedIndex([index1]);
     }
   }, [genreURL]);
 
@@ -42,13 +62,27 @@ const MovieSwpie = () => {
 
   // Shuffle to a new random movie
   const shuffleMovie = () => {
-    if (state.length > 0) {
-      setRandomIndex(Math.floor(Math.random() * (state.length-1)));
-    }
+    if (state.length === 0) 
+      return;
+      //all the indexes that have not been displayed already
+      const remainingIndexes = state
+      .map((_, i) => i)
+      .filter(i => !displayedIndexes.includes(i));
+      //if everything has already been displayed, clear the array and restart
+      if (remainingIndexes.length === 0)
+      {
+        setDisplayedIndex([]);
+        shuffleMovie();
+        return;
+      }
+      //since we still have fresh suggestions, suggest one of those. 
+      const index = remainingIndexes[Math.floor(Math.random() * (remainingIndexes.length))];
+      setRandomIndex(index);
+      setDisplayedIndex(prev => [...prev, index]);
   };
-
+  //the random suggestion
   const randomMovie = state[randomIndex];
-
+  //add to library function
   const handleAddToLibrary = (movie) => {
     addToLibrary(movie);
     setAddedToLibrary(movie.id); // Set the added movie ID
@@ -64,6 +98,7 @@ const MovieSwpie = () => {
           </div>
           <Genre
             genre={genre}
+            //setPage={setPage}
             setGenre={setGenre}
             type="movie"
             value={value}
