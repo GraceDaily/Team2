@@ -105,12 +105,8 @@ const MovieSwpie = () => {
             setValue={setValue}
           />
           <div className="col-12 mb-4 d-flex justify-content-center align-items-center gap-4">
-            <button
-              className="btn btn-primary mt-3"
-              onClick={() => handleAddToLibrary(randomMovie)}
-              disabled={!randomMovie} // Disable button if no movie is loaded
-            >
-              Add to Library
+          <button className="btn btn-primary mt-3" onClick={shuffleMovie}>
+             Hate it!
             </button>
 
             {randomMovie && (
@@ -145,9 +141,12 @@ const MovieSwpie = () => {
                 </div>
               </div>
             )}
-
-            <button className="btn btn-primary mt-3" onClick={shuffleMovie}>
-              Shuffle Movie
+            <button
+            className="btn btn-primary mt-3"
+              onClick={() => handleAddToLibrary(randomMovie)}
+              disabled={!randomMovie} // Disable button if no movie is loaded
+            >
+              Love it!
             </button>
           </div>
         </div>
