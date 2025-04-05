@@ -87,6 +87,7 @@ const MovieSwpie = () => {
     addToLibrary(movie);
     setAddedToLibrary(movie.id); // Set the added movie ID
     setTimeout(() => setAddedToLibrary(null), 2000); // Clear the message after 2 seconds
+    shuffleMovie();
   };
 
   return (
