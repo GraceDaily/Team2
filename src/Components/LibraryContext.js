@@ -28,8 +28,13 @@ export const LibraryProvider = ({ children }) => {
     localStorage.setItem("library", JSON.stringify(library));
   }, [library]);
 
+  // Remove movies and tv shows from libary
+  const removeFromLibrary = (movieId) => {
+    setLibrary((prevLibrary) => prevLibrary.filter((item) => item.id !== movieId));
+  };  
+
   return (
-    <LibraryContext.Provider value={{ library, addToLibrary, alreadyAdded }}>
+    <LibraryContext.Provider value={{ library, addToLibrary, removeFromLibrary, alreadyAdded }}>
       {children}
     </LibraryContext.Provider>
   );
