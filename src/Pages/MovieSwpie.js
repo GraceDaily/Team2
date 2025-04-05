@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import { img_300, unavailable } from "../Components/config";
+import Genre from "../Components/Genre";
 import useGenre from "../useGenre";
 import { LibraryContext } from "../Components/LibraryContext";
 
@@ -7,8 +8,9 @@ const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
 
 const MovieSwpie = () => {
   const [state, setState] = useState([]);
+  const [genre, setGenre] = useState([]); //used to store the original genre values
   const [addedToLibrary, setAddedToLibrary] = useState(null);
-  const [value] = useState([]);
+  const [value, setValue] = useState([]); //used to store the selected genre values
 
   const genreURL = useGenre(value);
   const { addToLibrary } = useContext(LibraryContext);
@@ -27,22 +29,21 @@ const MovieSwpie = () => {
     const dataK = await data2.json();
     const data = [...(dataJ.results || []), ...(dataK.results || [])];
     setState(data);
-
     // Set a random index when data is fetched
     if (data.length > 0) {
-      setRandomIndex(Math.floor(Math.random() * data.length));
+      setRandomIndex(Math.floor(Math.random() * (data.length-1)));
     }
   }, [genreURL]);
 
   // Fetch movies when the component mounts or genreURL changes
   useEffect(() => {
     fetchTrending();
-  }, [fetchTrending]);
+  }, [fetchTrending, genreURL]);
 
   // Shuffle to a new random movie
   const shuffleMovie = () => {
     if (state.length > 0) {
-      setRandomIndex(Math.floor(Math.random() * state.length));
+      setRandomIndex(Math.floor(Math.random() * (state.length-1)));
     }
   };
 
@@ -61,7 +62,13 @@ const MovieSwpie = () => {
           <div className="col-12 mt-2 mb-4 fs-1 fw-bold text-decoration-underline head d-flex justify-content-center align-items-center">
             MovieSwipe
           </div>
-
+          <Genre
+            genre={genre}
+            setGenre={setGenre}
+            type="movie"
+            value={value}
+            setValue={setValue}
+          />
           <div className="col-12 mb-4 d-flex justify-content-center align-items-center gap-4">
             <button
               className="btn btn-primary mt-3"
