@@ -87,6 +87,7 @@ const MovieSwpie = () => {
     addToLibrary(movie);
     setAddedToLibrary(movie.id); // Set the added movie ID
     setTimeout(() => setAddedToLibrary(null), 2000); // Clear the message after 2 seconds
+    shuffleMovie();
   };
 
   return (
@@ -105,12 +106,8 @@ const MovieSwpie = () => {
             setValue={setValue}
           />
           <div className="col-12 mb-4 d-flex justify-content-center align-items-center gap-4">
-            <button
-              className="btn btn-primary mt-3"
-              onClick={() => handleAddToLibrary(randomMovie)}
-              disabled={!randomMovie} // Disable button if no movie is loaded
-            >
-              Add to Library
+          <button className="btn btn-primary mt-3" onClick={shuffleMovie}>
+             Hate it!
             </button>
 
             {randomMovie && (
@@ -145,9 +142,12 @@ const MovieSwpie = () => {
                 </div>
               </div>
             )}
-
-            <button className="btn btn-primary mt-3" onClick={shuffleMovie}>
-              Shuffle Movie
+            <button
+            className="btn btn-primary mt-3"
+              onClick={() => handleAddToLibrary(randomMovie)}
+              disabled={!randomMovie} // Disable button if no movie is loaded
+            >
+              Love it!
             </button>
           </div>
         </div>
