@@ -138,8 +138,8 @@ const MovieSwpie = () => {
                     {randomMovie.title || randomMovie.name}
                   </h5>
                   <div className="d-flex fs-6 align-items-center justify-content-evenly movie">
-                    <div>{randomMovie.media_type === "tv" ? "TV Series" : "Movie"}</div>
-                    <div>{randomMovie.first_air_date || randomMovie.release_date}</div>
+                    <strong>{randomMovie.media_type === "tv" ? "TV Series" : "Movie"}</strong>
+                    <strong>{randomMovie.first_air_date || randomMovie.release_date}</strong>
                   </div>
 
                   <div className="mt-3 px-3 text-start">
