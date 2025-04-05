@@ -47,6 +47,11 @@ const Search = () => {
               type="text"
               placeholder="search..."
               onChange={Trigger}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  Search();
+                }
+              }}
               className="form-control-lg col-6 search bg-dark text-white border border-0"
             />
             <button
