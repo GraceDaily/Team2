@@ -3,7 +3,7 @@ import { LibraryContext } from "../Components/LibraryContext";
 import { img_300, unavailable } from "../Components/config";
 
 const Library = () => {
-  const { library } = useContext(LibraryContext);
+  const { library, removeFromLibrary } = useContext(LibraryContext);
 
   return (
     <>
@@ -28,10 +28,16 @@ const Library = () => {
                       className="card-img-top pt-3 pb-0 px-3"
                       alt={title || name}
                     />
-                    <div className="card-body">
+                    <div className="card-body d-flex flex-column align-items-center">
                       <h5 className="card-title text-center fs-5">
                         {title || name}
                       </h5>
+                      <button
+                        className="btn btn-danger mt-2"
+                        onClick={() => removeFromLibrary(id)}
+                      >
+                        Remove
+                      </button>
                     </div>
                   </div>
                 </div>
