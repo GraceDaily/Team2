@@ -16,14 +16,16 @@ const Movies = () => {
   const genreURL = useGenre(value);
   const { addToLibrary } = useContext(LibraryContext); // Use the context
 
-  const fetchTrending = async () => {
-    const data = await fetch(`
-    https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreURL}`);
-    const dataJ = await data.json();
-    setState(dataJ.results);
-  };
+  
 
   useEffect(() => {
+
+    const fetchTrending = async () => {
+      const data = await fetch(`
+      https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreURL}&with_original_language=en`);
+      const dataJ = await data.json();
+      setState(dataJ.results);
+    };
     fetchTrending();
   }, [page, genreURL]);
 

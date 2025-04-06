@@ -11,14 +11,15 @@ const Trending = () => {
   const { addToLibrary } = useContext(LibraryContext); // Use the context
   const [addedToLibrary, setAddedToLibrary] = useState(null); // State to manage the added message
 
-  const fetchTrending = async () => {
-    const data = await fetch(`
-    https://api.themoviedb.org/3/trending/all/day?api_key=${API_KEY}&page=${page}`);
-    const dataJ = await data.json();
-    setState(dataJ.results);
-  };
+  
 
   useEffect(() => {
+    const fetchTrending = async () => {
+      const data = await fetch(`
+      https://api.themoviedb.org/3/trending/all/day?api_key=${API_KEY}&page=${page}&with_original_language=en`);
+      const dataJ = await data.json();
+      setState(dataJ.results);
+    };
     fetchTrending();
   }, [page]);
 

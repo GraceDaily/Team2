@@ -25,7 +25,7 @@ const MovieSwpie = () => {
   const fetchTrending = useCallback(async () => {
     const getData = async(type, page = 1) => {
     const data = await fetch(`
-      https://api.themoviedb.org/3/discover/${type}?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreURL}`);
+      https://api.themoviedb.org/3/discover/${type}?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&with_genres=${genreURL}&with_original_language=en`);
       const dataJ = await data.json();
       return dataJ.results || []; 
     };

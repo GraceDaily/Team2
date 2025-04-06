@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import Pagination from "../Components/Pagination";
 import { img_300, unavailable } from "../Components/config";
 import { LibraryContext } from "../Components/LibraryContext";
@@ -13,17 +13,17 @@ const Search = () => {
   const { addToLibrary } = useContext(LibraryContext); // Use the context
   const [addedToLibrary, setAddedToLibrary] = useState(null); // State to manage the added message
 
-  const fetchSearch = async () => {
+  const fetchSearch = useCallback(async () => {
     const data = await fetch(
-      `https://api.themoviedb.org/3/search/multi?api_key=${API_KEY}&language=en-US&query=${searchText}&page=${page}&include_adult=false`
+      `https://api.themoviedb.org/3/search/multi?api_key=${API_KEY}&language=en-US&query=${searchText}&page=${page}&include_adult=false&with_original_language=en`
     );
     const { results } = await data.json();
     setContent(results);
-  };
+  },[searchText,page]);
 
   useEffect(() => {
     fetchSearch();
-  }, []);
+  }, [fetchSearch]);
 
   const Search = () => {
     fetchSearch();
@@ -77,6 +77,7 @@ const Search = () => {
                             ? `${img_300}/${poster_path}`
                             : unavailable
                         }
+                        alt={title}
                         className="card-img-top pt-3 pb-0 px-3"
                       />
                       <div className="card-body">
