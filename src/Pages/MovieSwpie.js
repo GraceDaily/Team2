@@ -69,6 +69,7 @@ const MovieSwpie = () => {
     }
   };
 
+<<<<<<< HEAD
   const fetchTrailer = async (media) => {
     const type = media.media_type || "movie"; // "movie" or "tv"
     const url = `https://api.themoviedb.org/3/${type}/${media.id}/videos?api_key=${API_KEY}`;
@@ -85,6 +86,10 @@ const MovieSwpie = () => {
       setTrailerKey(null);
     }
   };  
+=======
+
+
+>>>>>>> 29477f8 (Add rating MovieSwipe)
 
   const shuffleMovie = () => {
     if (state.length === 0) return;
@@ -156,9 +161,13 @@ const MovieSwpie = () => {
                   <h5 className="card-title text-center fs-5">
                     {randomMovie.title || randomMovie.name}
                   </h5>
-                  <div className="d-flex fs-6 align-items-center justify-content-evenly movie">
+                  <div className="d-flex fs-6 align-items-center justify-content-evenly">
                     <strong>{randomMovie.media_type === "tv" ? "TV Series" : "Movie"}</strong>
                     <strong>{randomMovie.first_air_date || randomMovie.release_date}</strong>
+                  </div>
+
+                  <div className="d-flex fs-6 align-items-center justify-content-evenly mt-2">
+                <strong>Rating: {randomMovie.vote_average ? `${Math.ceil(randomMovie.vote_average)} / 10`  : "N/A"}</strong>
                   </div>
 
                   <div className="mt-3 px-3 text-start">
