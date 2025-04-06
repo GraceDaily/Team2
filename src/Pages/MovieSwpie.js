@@ -69,6 +69,26 @@ const MovieSwpie = () => {
     }
   };
 
+  const fetchTrailer = async (media) => {
+    const type = media.media_type || "movie"; // "movie" or "tv"
+    const url = `https://api.themoviedb.org/3/${type}/${media.id}/videos?api_key=${API_KEY}`;
+  
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      const trailer = data.results.find(
+        (vid) => vid.type === "Trailer" && vid.site === "YouTube"
+      );
+      setTrailerKey(trailer ? trailer.key : null);
+    } catch (err) {
+      console.error("Error fetching trailer:", err);
+      setTrailerKey(null);
+    }
+  };  
+
+
+
+
   const shuffleMovie = () => {
     if (state.length === 0) return;
 
