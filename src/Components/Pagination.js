@@ -5,14 +5,17 @@ const Pagination = ({page, setPage}) => {
   const Previous = () => {
     if (page !== 1) {
       setPage(page - 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } else {
       setPage(page);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
   const Next = () => {
     if (page < 10) {
       setPage(page + 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
@@ -37,3 +40,4 @@ const Pagination = ({page, setPage}) => {
 };
 
 export default Pagination;
+
