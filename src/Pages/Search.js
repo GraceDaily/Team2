@@ -53,6 +53,7 @@ const Search = () => {
                 }
               }}
               className="form-control-lg col-6 search bg-dark text-white border border-0"
+              style={{ textTransform: "none" }}
             />
             <button
               className="btn btn-danger text-white mx-2 col-md-1 col-sm-2 py-2"
