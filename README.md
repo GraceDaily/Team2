@@ -1,8 +1,4 @@
 
-## The BingeSpot Website
-
-Open [The BingeSpot](https://thebingespot.vercel.app/) to start browsing movies and tv shows.
-
 ## Available Scripts
 
 In the project directory, you can run:
