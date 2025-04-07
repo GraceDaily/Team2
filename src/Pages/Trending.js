@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { img_300, unavailable } from "../Components/config";
 import Pagination from "../Components/Pagination";
 import { LibraryContext } from "../Components/LibraryContext";
+import Disclaimer from  "../Components/Disclaimer";
 
 const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
 
@@ -29,13 +30,18 @@ const Trending = () => {
     setTimeout(() => setAddedToLibrary(null), 2000); // Clear the message after 2 seconds
   };
 
+ 
   return (
-    <>
+    <> 
+      <div>
+        <Disclaimer />
+      </div>     
       <div className="container">
         <div className="row py-5 my-5">
           <div className="col-12 mt-2 mb-4 fs-1 fw-bold text-decoration-underline head d-flex justify-content-center align-items-center">
             Trending
           </div>
+          
           {state.map((Val) => {
             const {
               name,
