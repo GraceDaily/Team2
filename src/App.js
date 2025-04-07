@@ -9,9 +9,11 @@ import Library from "./Pages/Library";
 import MovieSwpie from "./Pages/MovieSwpie";
 import Search from "./Pages/Search";
 import Error from "./Pages/Error";
+import Disclaimer from "./Components/Disclaimer";
 const App = () => {
   return (
     <>
+      <Disclaimer />
       <BrowserRouter>
         <Header />
         <Routes>
