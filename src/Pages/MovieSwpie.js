@@ -29,11 +29,16 @@ const MovieSwipe = () => {
     };
 
     const data = await Promise.all([
-      getData("movie", 1), getData("movie", 2),
-      getData("movie", 3), getData("movie", 4),
-      getData("movie", 5), getData("tv", 1),
-      getData("tv", 2), getData("tv", 3),
-      getData("tv", 4), getData("tv", 5)
+      getData("movie", 1).then(results => results.map(item => ({ ...item, media_type: "movie" }))),
+      getData("movie", 2).then(results => results.map(item => ({ ...item, media_type: "movie" }))),
+      getData("movie", 3).then(results => results.map(item => ({ ...item, media_type: "movie" }))),
+      getData("movie", 4).then(results => results.map(item => ({ ...item, media_type: "movie" }))),
+      getData("movie", 5).then(results => results.map(item => ({ ...item, media_type: "movie" }))),
+      getData("tv", 1).then(results => results.map(item => ({ ...item, media_type: "tv" }))),
+      getData("tv", 2).then(results => results.map(item => ({ ...item, media_type: "tv" }))),
+      getData("tv", 3).then(results => results.map(item => ({ ...item, media_type: "tv" }))),
+      getData("tv", 4).then(results => results.map(item => ({ ...item, media_type: "tv" }))),
+      getData("tv", 5).then(results => results.map(item => ({ ...item, media_type: "tv" })))
     ]);
 
     const mediaData = data.flat();
@@ -51,8 +56,9 @@ const MovieSwipe = () => {
     fetchTrending();
   }, [fetchTrending, genreURL]);
 
-  const fetchCast = async (movieId) => {
-    const url = `https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${API_KEY}&language=en-US`;
+  const fetchCast = async (media) => {
+    const type = media.media_type || "movie";
+    const url = `https://api.themoviedb.org/3/${type}/${media.id}/credits?api_key=${API_KEY}&language=en-US`;
     try {
       const response = await fetch(url);
       const data = await response.json();
@@ -105,7 +111,7 @@ const MovieSwipe = () => {
 
   useEffect(() => {
     if (randomMovie) {
-      fetchCast(randomMovie.id);
+      fetchCast(randomMovie);
       fetchTrailer(randomMovie);
     }
   }, [randomMovie]);
