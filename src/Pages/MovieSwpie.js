@@ -126,15 +126,20 @@ const MovieSwipe = () => {
 
           {randomMovie && (
             <div className="card d-flex flex-row bg-dark text-white mb-4" style={{ width: "80%", overflow: "hidden" }}>
-              <img
-                src={randomMovie.poster_path ? `${img_300}/${randomMovie.poster_path}` : unavailable}
-                className="card-img-top pt-3 pb-3 px-3 py-3"
-                style={{ width: "250px", objectFit: "cover" }}
-                alt={randomMovie.title || randomMovie.name}
-              />
+              <div className="d-flex flex-column align-items-center py-1 px-1">
+                <img
+                  src={randomMovie.poster_path ? `${img_300}/${randomMovie.poster_path}` : unavailable}
+                  className="card-img-top pt-3 pb-3 px-3 py-3"
+                  style={{ width: "250px", objectFit: "cover" }}
+                  alt={randomMovie.title || randomMovie.name}
+                />
+                <div className="mt-2 text-center">
+                  <strong>Rating: {randomMovie.vote_average ? `${Math.ceil(randomMovie.vote_average)} / 10`  : "N/A"}</strong>
+                </div>
+              </div>
               <div className="card-body d-flex flex-column">
                 <div>
-                  <h5 className="card-title">{randomMovie.title || randomMovie.name}</h5>
+                  <h5 className="card-title fs-2">{randomMovie.title || randomMovie.name}</h5>
                   <div className="d-flex justify-content-between">
                     <strong>{randomMovie.media_type === "tv" ? "TV Series" : "Movie"}</strong>
                     <strong>{randomMovie.first_air_date || randomMovie.release_date}</strong>
