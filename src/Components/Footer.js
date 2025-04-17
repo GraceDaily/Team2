@@ -52,12 +52,12 @@ const Footer = () => {
                 <>
                   <NavLink to={`${Val.link}`}>
                     <button
-                      className="col-sm-2 col-md-2 btn btn-dark"
+                      className="footerButton col-sm-2 col-md-2 btn btn-dark"
                       key={Val.id}
                     >
                       <i className={`${Val.icon}`} id="fire"></i>
                       <br />
-                      <h5 className="pt-1 fs-6">{Val.name}</h5>
+                      <h5 className="footerText pt-1 fs-6">{Val.name}</h5>
                     </button>
                   </NavLink>
                 </>

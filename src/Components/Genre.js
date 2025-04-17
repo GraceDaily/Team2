@@ -103,7 +103,7 @@ const Genre = ({ genre, setGenre, setPage, type, value, setValue }) => {
     <>
       <div className="container-fluid">
         <div className="row mb-3">
-          <div className="col-12 d-flex flex-wrap">
+          <div className="genre col-12 d-flex flex-wrap">
             {value && //if value exist
               value.map((Val) => {
                 const { id, name } = Val;

@@ -133,7 +133,7 @@ const MovieSwipe = () => {
   }, [randomMovie]);
 
   return (
-    <div className="container">
+    <div className="movieswipe">
       <div className="row py-5 my-5">
         <div className="col-12 mb-4 fs-1 fw-bold text-decoration-underline text-center">
           MovieSwipe
@@ -141,8 +141,8 @@ const MovieSwipe = () => {
 
         <Genre genre={genre} setGenre={setGenre} type="movie" value={value} setValue={setValue} />
 
-        <div className="col-12 d-flex justify-content-center align-items-center gap-4 flex-wrap">
-          <button className="btn btn-primary mt-3" onClick={shuffleMovie}>
+        <div className="test col-12 d-flex justify-content-center align-items-center gap-4 flex-wrap">
+          <button className="btn btn-primary mt-3 swipeButton" onClick={shuffleMovie}>
             Hate it!
           </button>
 
@@ -152,7 +152,7 @@ const MovieSwipe = () => {
                 <img
                   src={randomMovie.poster_path ? `${img_300}/${randomMovie.poster_path}` : unavailable}
                   className="card-img-top pt-3 pb-3 px-3 py-3"
-                  style={{ width: "250px", objectFit: "cover" }}
+                  style={{ objectFit: "cover" }}
                   alt={randomMovie.title || randomMovie.name}
                 />
                 <div className="mt-2 text-center">
@@ -222,7 +222,7 @@ const MovieSwipe = () => {
           )}
 
           <button
-            className="btn btn-primary mt-3"
+            className="btn btn-primary mt-3 swipeButton"
             onClick={() => handleAddToLibrary(randomMovie)}
             disabled={!randomMovie}
           >
