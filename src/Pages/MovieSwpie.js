@@ -12,6 +12,7 @@ const MovieSwipe = () => {
   const [value, setValue] = useState([]);
   const [addedToLibrary, setAddedToLibrary] = useState(null);
   const [cast, setCast] = useState([]);
+  const [streaming, setStreaming] = useState([]);
   const [trailerKey, setTrailerKey] = useState(null);
   const [randomIndex, setRandomIndex] = useState(null);
   const [displayedIndexes, setDisplayedIndex] = useState([]);
@@ -85,6 +86,20 @@ const MovieSwipe = () => {
     }
   };
 
+
+  const fetchStreaming = async (media) => {
+    const type = media.media_type || "movie";
+    const url = `https://api.themoviedb.org/3/${type}/${media.id}/watch/providers?api_key=${API_KEY}&language=en-US`;
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      setStreaming(data.results?.US?.flatrate || []);
+    } catch (error) {
+      console.error("Error fetching steaming services:", error);
+      setStreaming([]);
+    }
+  };
+
   const shuffleMovie = () => {
     if (state.length === 0) return;
 
@@ -113,6 +128,7 @@ const MovieSwipe = () => {
     if (randomMovie) {
       fetchCast(randomMovie);
       fetchTrailer(randomMovie);
+      fetchStreaming(randomMovie);
     }
   }, [randomMovie]);
 
@@ -164,6 +180,24 @@ const MovieSwipe = () => {
                       {randomMovie.overview || "No overview available."}
                     </span>
                   </p>
+                </div>
+                <div className = "mt-2 mb-3">
+                  <strong>Streaming:</strong>
+                    {streaming.length > 0 ? (
+                      <div className="flex flex-wrap gap-3 items-center">
+                        {streaming.map((provider) =>
+                      <img 
+                      key={provider.provider_name}
+                      src= {`https://image.tmdb.org/t/p/w45${provider.logo_path}`}
+                      alt = {provider.provider_name}
+                      title = {provider.provider_name}
+                      className = "h-6 w-6 object-contain mx-2"
+                      />
+                      )}
+                      </div>
+                    ) : (
+                      <p className="text-muted mb-2">No streaming service information available.</p>
+                    )}
                 </div>
                 <div className="mt-auto">
                   <strong>Trailer</strong>
