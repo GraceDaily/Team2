@@ -31,8 +31,12 @@ body {
   background-color: #fff !important;
   color: black !important;
 }
-.card-img-top {
+.movieswipe-card-img-top{
+  height: 400px;
   width: 250px;
+  border-radius: 34px;
+}
+.card-img-top {
   height: 400px;
   border-radius: 34px;
 }
@@ -81,6 +85,12 @@ a:hover {
   .card {
     margin: 0 3%;
     height: 100%;
+  }
+
+  .movieswipe-card-img-top{
+    height: 240px;
+    width: 150px;
+    border-radius: 20px;
   }
   .card-img-top {
     height: 240px;
