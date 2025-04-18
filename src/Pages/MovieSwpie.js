@@ -184,7 +184,7 @@ const MovieSwipe = () => {
                 <div className = "mt-2 mb-3">
                   <strong>Streaming:</strong>
                     {streaming.length > 0 ? (
-                      <div className="flex flex-wrap gap-3 items-center">
+                      <div className="flex flex-wrap gap-3 m-2 items-center">
                         {streaming.map((provider) =>
                       <img 
                       key={provider.provider_name}
@@ -200,7 +200,7 @@ const MovieSwipe = () => {
                     )}
                 </div>
                 <div className="mt-auto">
-                  <strong>Trailer</strong>
+                  <strong>Trailer:</strong>
                   {trailerKey ? (
                     <div className="ratio ratio-16x9 mt-2">
                       <iframe
