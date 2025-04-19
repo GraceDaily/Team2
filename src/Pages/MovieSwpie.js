@@ -7,6 +7,17 @@ import "./MovieSwipe.css";
 
 const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
 
+const providerLinks = {
+  "Netflix": "https://www.netflix.com",
+  "Hulu": "https://www.hulu.com",
+  "Amazon Prime Video": "https://www.primevideo.com",
+  "Disney+": "https://www.disneyplus.com",
+  "HBO Max": "https://www.hbomax.com",
+  "AppleTV": "https://tv.apple.com",
+  "Peacock": "https://www.peacocktv.com",
+  "Paramount+": "https://www.paramountplus.com",
+};
+
 const MovieSwipe = () => {
   const [state, setState] = useState([]);
   const [genre, setGenre] = useState([]);
@@ -94,9 +105,17 @@ const MovieSwipe = () => {
     try {
       const response = await fetch(url);
       const data = await response.json();
-      setStreaming(data.results?.US?.flatrate || []);
+      const providers = data.results?.US?.flatrate || [];
+      const tmdbLink = data.results?.US?.link || "#"; // TMDB fallback link for the movie or TV show
+
+      setStreaming(
+        providers.map((provider) => ({
+          ...provider,
+          link: providerLinks[provider.provider_name] || tmdbLink, // Use mapped link or fallback to TMDB link
+        }))
+      );
     } catch (error) {
-      console.error("Error fetching steaming services:", error);
+      console.error("Error fetching streaming services:", error);
       setStreaming([]);
     }
   };
@@ -208,23 +227,29 @@ const MovieSwipe = () => {
                     </span>
                   </p>
                 </div>
-                <div className = "mt-2 mb-3">
+                <div className="mt-2 mb-3">
                   <strong>Streaming:</strong>
-                    {streaming.length > 0 ? (
-                      <div className="flex flex-wrap gap-3 m-2 items-center">
-                        {streaming.map((provider) =>
-                      <img 
-                      key={provider.provider_name}
-                      src= {`https://image.tmdb.org/t/p/w45${provider.logo_path}`}
-                      alt = {provider.provider_name}
-                      title = {provider.provider_name}
-                      className = "h-6 w-6 object-contain mx-2"
-                      />
-                      )}
-                      </div>
-                    ) : (
-                      <p className="text-muted mb-2">No streaming service information available.</p>
-                    )}
+                  {streaming.length > 0 ? (
+                    <div className="flex flex-wrap gap-3 m-2 items-center">
+                      {streaming.map((provider) => (
+                        <a
+                          key={provider.provider_name}
+                          href={provider.link} // Use the mapped link or TMDB fallback link
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <img
+                            src={`https://image.tmdb.org/t/p/w45${provider.logo_path}`}
+                            alt={provider.provider_name}
+                            title={provider.provider_name}
+                            className="h-6 w-6 object-contain mx-2"
+                          />
+                        </a>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-muted mb-2">No streaming service information available.</p>
+                  )}
                 </div>
                 <div className="mt-auto">
                   <strong>Trailer:</strong>
