@@ -3,6 +3,7 @@ import { img_300, unavailable } from "../Components/config";
 import Genre from "../Components/Genre";
 import useGenre from "../useGenre";
 import { LibraryContext } from "../Components/LibraryContext";
+import "./MovieSwipe.css";
 
 const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
 
@@ -16,6 +17,7 @@ const MovieSwipe = () => {
   const [trailerKey, setTrailerKey] = useState(null);
   const [randomIndex, setRandomIndex] = useState(null);
   const [displayedIndexes, setDisplayedIndex] = useState([]);
+  const [animationDirection, setAnimationDirection] = useState(null);
 
   const genreURL = useGenre(value);
   const { addToLibrary } = useContext(LibraryContext);
@@ -86,7 +88,6 @@ const MovieSwipe = () => {
     }
   };
 
-
   const fetchStreaming = async (media) => {
     const type = media.media_type || "movie";
     const url = `https://api.themoviedb.org/3/${type}/${media.id}/watch/providers?api_key=${API_KEY}&language=en-US`;
@@ -100,26 +101,31 @@ const MovieSwipe = () => {
     }
   };
 
-  const shuffleMovie = () => {
+  const shuffleMovie = (direction = "left") => {
     if (state.length === 0) return;
+
+    setAnimationDirection(direction); // Set the animation direction
 
     const remaining = state.map((_, i) => i).filter((i) => !displayedIndexes.includes(i));
     if (remaining.length === 0) {
       setDisplayedIndex([]);
-      shuffleMovie();
+      shuffleMovie(direction);
       return;
     }
 
-    const index = remaining[Math.floor(Math.random() * remaining.length)];
-    setRandomIndex(index);
-    setDisplayedIndex((prev) => [...prev, index]);
+    setTimeout(() => {
+      const index = remaining[Math.floor(Math.random() * remaining.length)];
+      setRandomIndex(index);
+      setDisplayedIndex((prev) => [...prev, index]);
+      setAnimationDirection(null); // Reset the animation direction
+    }, 500); // Match the animation duration
   };
 
   const handleAddToLibrary = (movie) => {
     addToLibrary(movie);
     setAddedToLibrary(movie.id);
     setTimeout(() => setAddedToLibrary(null), 2000);
-    shuffleMovie();
+    shuffleMovie("right"); // Swipe right for "Love it!"
   };
 
   const randomMovie = state[randomIndex];
@@ -132,6 +138,22 @@ const MovieSwipe = () => {
     }
   }, [randomMovie]);
 
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "ArrowLeft") {
+        shuffleMovie("left"); // Trigger "Hate it!" action
+      } else if (event.key === "ArrowRight") {
+        handleAddToLibrary(randomMovie); // Trigger "Love it!" action
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [randomMovie, shuffleMovie, handleAddToLibrary]);
+
   return (
     <div className="movieswipe">
       <div className="row py-5 my-5">
@@ -142,12 +164,17 @@ const MovieSwipe = () => {
         <Genre genre={genre} setGenre={setGenre} type="movie" value={value} setValue={setValue} />
 
         <div className="test col-12 d-flex justify-content-center align-items-center gap-4 flex-wrap">
-          <button className="btn btn-primary mt-3 swipeButton" onClick={shuffleMovie}>
+          <button className="btn btn-primary mt-3 swipeButton" onClick={() => shuffleMovie("left")}>
             Hate it!
           </button>
 
           {randomMovie && (
-            <div className="card d-flex flex-row bg-dark text-white mb-4" style={{ width: "80%", overflow: "hidden" }}>
+            <div
+              className={`card d-flex flex-row bg-dark text-white mb-4 ${
+                animationDirection ? `swipe-animation swipe-${animationDirection}` : ""
+              }`}
+              style={{ width: "80%", overflow: "hidden" }}
+            >
               <div className="d-flex flex-column align-items-center py-1 px-1">
                 <img
                   src={randomMovie.poster_path ? `${img_300}/${randomMovie.poster_path}` : unavailable}
