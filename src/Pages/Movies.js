@@ -4,6 +4,7 @@ import Pagination from "../Components/Pagination";
 import Genre from "../Components/Genre";
 import useGenre from "../useGenre";
 import { LibraryContext } from "../Components/LibraryContext";
+import formatDate from "../Components/formatDate";
 const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
 
 const Movies = () => {
@@ -76,7 +77,7 @@ const Movies = () => {
                     </h5>
                     <div className="d-flex fs-6 align-items-center justify-content-evenly movie">
                       <div>{media_type === "tv" ? "TV Series" : "Movie"}</div>
-                      <div>{first_air_date || release_date}</div>
+                      <div>{formatDate(first_air_date || release_date)}</div>
                     </div>
                     {/* Centered Button and Added Message */}
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '10px' }}>

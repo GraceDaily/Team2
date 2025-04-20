@@ -3,7 +3,7 @@ import { img_300, unavailable } from "../Components/config";
 import Genre from "../Components/Genre";
 import useGenre from "../useGenre";
 import { LibraryContext } from "../Components/LibraryContext";
-
+import formatDate from "../Components/formatDate";
 const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
 
 const MovieSwipe = () => {
@@ -11,6 +11,7 @@ const MovieSwipe = () => {
   const [genre, setGenre] = useState([]);
   const [value, setValue] = useState([]);
   const [addedToLibrary, setAddedToLibrary] = useState(null);
+  const [runtime, setRuntime] = useState(null);
   const [cast, setCast] = useState([]);
   const [streaming, setStreaming] = useState([]);
   const [trailerKey, setTrailerKey] = useState(null);
@@ -56,6 +57,24 @@ const MovieSwipe = () => {
   useEffect(() => {
     fetchTrending();
   }, [fetchTrending, genreURL]);
+
+  const fetchRuntime = async (media) => {
+    const type = media.media_type || "movie";
+    const url = `https://api.themoviedb.org/3/${type}/${media.id}?api_key=${API_KEY}&language=en-US`;
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      if (type === "movie") {
+        setRuntime(data.runtime ? `${data.runtime}m` : "N/A");
+      } else if (type === "tv") {
+        const avg = data.episode_run_time?.[0];
+        setRuntime(avg ? `${avg}m/episode` : "N/A");
+      }
+    } catch (err) {
+      console.error("Error fetching runtime:", err);
+      setRuntime("N/A");
+    }
+  };
 
   const fetchCast = async (media) => {
     const type = media.media_type || "movie";
@@ -126,6 +145,7 @@ const MovieSwipe = () => {
 
   useEffect(() => {
     if (randomMovie) {
+      fetchRuntime(randomMovie);
       fetchCast(randomMovie);
       fetchTrailer(randomMovie);
       fetchStreaming(randomMovie);
@@ -162,9 +182,16 @@ const MovieSwipe = () => {
               <div className="card-body d-flex flex-column">
                 <div>
                   <h5 className="card-title fs-2">{randomMovie.title || randomMovie.name}</h5>
-                  <div className="d-flex justify-content-between">
+                  <div className="d-flex gap-2 align-items-center flex-wrap">
                     <strong>{randomMovie.media_type === "tv" ? "TV Series" : "Movie"}</strong>
-                    <strong>{randomMovie.first_air_date || randomMovie.release_date}</strong>
+                    <span>•</span>
+                    <strong>{formatDate(randomMovie.first_air_date || randomMovie.release_date)}</strong>
+                    {runtime && (
+                    <>
+                      <span>•</span>
+                      <strong>{runtime}</strong>
+                    </>
+                    )}
                   </div>
                   <div className="mt-3">
                     <strong>Cast:</strong>
