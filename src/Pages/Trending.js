@@ -4,6 +4,7 @@ import Pagination from "../Components/Pagination";
 import { LibraryContext } from "../Components/LibraryContext";
 import Disclaimer from  "../Components/Disclaimer";
 import formatDate from "../Components/formatDate";
+import MediaDetails from "../Components/MediaDetails";
 const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
 
 const Trending = () => {
@@ -11,6 +12,8 @@ const Trending = () => {
   const [page, setPage] = useState(1); // initialised the page state with the initial value of 1
   const { addToLibrary } = useContext(LibraryContext); // Use the context
   const [addedToLibrary, setAddedToLibrary] = useState(null); // State to manage the added message
+  const [selectedMedia, setSelectedMedia] = useState(null); // Add state for selected media
+  const [showModal, setShowModal] = useState(false); // Add state for modal visibility
 
   
 
@@ -28,6 +31,12 @@ const Trending = () => {
     addToLibrary(movie);
     setAddedToLibrary(movie.id); // Set the added movie ID
     setTimeout(() => setAddedToLibrary(null), 2000); // Clear the message after 2 seconds
+  };
+
+  // Add handler for poster click
+  const handlePosterClick = (media) => {
+    setSelectedMedia(media);
+    setShowModal(true);
   };
 
  
@@ -65,6 +74,8 @@ const Trending = () => {
                     }
                     className="card-img-top pt-3 pb-0 px-3"
                     alt={title}
+                    style={{ cursor: "pointer" }} // Add pointer cursor
+                    onClick={() => handlePosterClick(Val)} // Add click handler
                   />
                   <div className="card-body">
                     <h5 className="card-title text-center fs-5">
@@ -94,6 +105,11 @@ const Trending = () => {
           <Pagination page={page} setPage={setPage} />
         </div>
       </div>
+      <MediaDetails
+        show={showModal}
+        handleClose={() => setShowModal(false)}
+        media={selectedMedia}
+      />
     </>
   );
 };

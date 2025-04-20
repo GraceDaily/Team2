@@ -5,6 +5,7 @@ import Genre from "../Components/Genre";
 import useGenre from "../useGenre";
 import { LibraryContext } from "../Components/LibraryContext";
 import formatDate from "../Components/formatDate";
+import MediaDetails from "../Components/MediaDetails";
 const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
 
 const Movies = () => {
@@ -13,9 +14,10 @@ const Movies = () => {
   const [genre, setGenre] = useState([]); //used to store the original genre values
   const [value, setValue] = useState([]); //used to store the selected genre values
   const [addedToLibrary, setAddedToLibrary] = useState(null); // State to manage the added message
-  
   const genreURL = useGenre(value);
   const { addToLibrary } = useContext(LibraryContext); // Use the context
+  const [selectedMedia, setSelectedMedia] = useState(null); // Add state for selected media
+  const [showModal, setShowModal] = useState(false); // Add state for modal visibility
 
   
 
@@ -34,6 +36,12 @@ const Movies = () => {
     addToLibrary(movie);
     setAddedToLibrary(movie.id); // Set the added movie ID
     setTimeout(() => setAddedToLibrary(null), 2000); // Clear the message after 2 seconds
+  };
+
+  // Add handler for poster click
+  const handlePosterClick = (media) => {
+    setSelectedMedia(media);
+    setShowModal(true);
   };
 
   return (
@@ -70,6 +78,8 @@ const Movies = () => {
                     }
                     className="card-img-top pt-3 pb-0 px-3"
                     alt={title || name}
+                    style={{ cursor: "pointer" }} // Add pointer cursor
+                    onClick={() => handlePosterClick(Val)} // Add click handler
                   />
                   <div className="card-body">
                     <h5 className="card-title text-center fs-5">
@@ -99,6 +109,11 @@ const Movies = () => {
           <Pagination page={page} setPage={setPage} />
         </div>
       </div>
+      <MediaDetails
+        show={showModal}
+        handleClose={() => setShowModal(false)}
+        media={selectedMedia}
+      />
     </>
   );
 };
