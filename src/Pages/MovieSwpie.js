@@ -4,7 +4,19 @@ import Genre from "../Components/Genre";
 import useGenre from "../useGenre";
 import { LibraryContext } from "../Components/LibraryContext";
 import formatDate from "../Components/formatDate";
+import "./MovieSwipe.css";
 const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
+
+const providerLinks = {
+  "Netflix": "https://www.netflix.com",
+  "Hulu": "https://www.hulu.com",
+  "Amazon Prime Video": "https://www.primevideo.com",
+  "Disney+": "https://www.disneyplus.com",
+  "HBO Max": "https://www.hbomax.com",
+  "AppleTV": "https://tv.apple.com",
+  "Peacock": "https://www.peacocktv.com",
+  "Paramount+": "https://www.paramountplus.com",
+};
 
 const MovieSwipe = () => {
   const [state, setState] = useState([]);
@@ -17,6 +29,7 @@ const MovieSwipe = () => {
   const [trailerKey, setTrailerKey] = useState(null);
   const [randomIndex, setRandomIndex] = useState(null);
   const [displayedIndexes, setDisplayedIndex] = useState([]);
+  const [animationDirection, setAnimationDirection] = useState(null);
 
   const genreURL = useGenre(value);
   const { addToLibrary } = useContext(LibraryContext);
@@ -105,40 +118,52 @@ const MovieSwipe = () => {
     }
   };
 
-
   const fetchStreaming = async (media) => {
     const type = media.media_type || "movie";
     const url = `https://api.themoviedb.org/3/${type}/${media.id}/watch/providers?api_key=${API_KEY}&language=en-US`;
     try {
       const response = await fetch(url);
       const data = await response.json();
-      setStreaming(data.results?.US?.flatrate || []);
+      const providers = data.results?.US?.flatrate || [];
+      const tmdbLink = data.results?.US?.link || "#"; // TMDB fallback link for the movie or TV show
+
+      setStreaming(
+        providers.map((provider) => ({
+          ...provider,
+          link: providerLinks[provider.provider_name] || tmdbLink, // Use mapped link or fallback to TMDB link
+        }))
+      );
     } catch (error) {
-      console.error("Error fetching steaming services:", error);
+      console.error("Error fetching streaming services:", error);
       setStreaming([]);
     }
   };
 
-  const shuffleMovie = () => {
+  const shuffleMovie = (direction = "left") => {
     if (state.length === 0) return;
+
+    setAnimationDirection(direction); // Set the animation direction
 
     const remaining = state.map((_, i) => i).filter((i) => !displayedIndexes.includes(i));
     if (remaining.length === 0) {
       setDisplayedIndex([]);
-      shuffleMovie();
+      shuffleMovie(direction);
       return;
     }
 
-    const index = remaining[Math.floor(Math.random() * remaining.length)];
-    setRandomIndex(index);
-    setDisplayedIndex((prev) => [...prev, index]);
+    setTimeout(() => {
+      const index = remaining[Math.floor(Math.random() * remaining.length)];
+      setRandomIndex(index);
+      setDisplayedIndex((prev) => [...prev, index]);
+      setAnimationDirection(null); // Reset the animation direction
+    }, 500); // Match the animation duration
   };
 
   const handleAddToLibrary = (movie) => {
     addToLibrary(movie);
     setAddedToLibrary(movie.id);
     setTimeout(() => setAddedToLibrary(null), 2000);
-    shuffleMovie();
+    shuffleMovie("right"); // Swipe right for "Love it!"
   };
 
   const randomMovie = state[randomIndex];
@@ -152,6 +177,22 @@ const MovieSwipe = () => {
     }
   }, [randomMovie]);
 
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "ArrowLeft") {
+        shuffleMovie("left"); // Trigger "Hate it!" action
+      } else if (event.key === "ArrowRight") {
+        handleAddToLibrary(randomMovie); // Trigger "Love it!" action
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [randomMovie, shuffleMovie, handleAddToLibrary]);
+
   return (
     <div className="movieswipe">
       <div className="row py-5 my-5">
@@ -162,12 +203,17 @@ const MovieSwipe = () => {
         <Genre genre={genre} setGenre={setGenre} type="movie" value={value} setValue={setValue} />
 
         <div className="test col-12 d-flex justify-content-center align-items-center gap-4 flex-wrap">
-          <button className="btn btn-primary mt-3 swipeButton" onClick={shuffleMovie}>
+          <button className="btn btn-primary mt-3 swipeButton" onClick={() => shuffleMovie("left")}>
             Hate it!
           </button>
 
           {randomMovie && (
-            <div className="card d-flex flex-row bg-dark text-white mb-4" style={{ width: "80%", overflow: "hidden" }}>
+            <div
+              className={`card d-flex flex-row bg-dark text-white mb-4 ${
+                animationDirection ? `swipe-animation swipe-${animationDirection}` : ""
+              }`}
+              style={{ width: "80%", overflow: "hidden" }}
+            >
               <div className="d-flex flex-column align-items-center py-1 px-1">
                 <img
                   src={randomMovie.poster_path ? `${img_300}/${randomMovie.poster_path}` : unavailable}
@@ -208,23 +254,29 @@ const MovieSwipe = () => {
                     </span>
                   </p>
                 </div>
-                <div className = "mt-2 mb-3">
+                <div className="mt-2 mb-3">
                   <strong>Streaming:</strong>
-                    {streaming.length > 0 ? (
-                      <div className="flex flex-wrap gap-3 m-2 items-center">
-                        {streaming.map((provider) =>
-                      <img 
-                      key={provider.provider_name}
-                      src= {`https://image.tmdb.org/t/p/w45${provider.logo_path}`}
-                      alt = {provider.provider_name}
-                      title = {provider.provider_name}
-                      className = "h-6 w-6 object-contain mx-2"
-                      />
-                      )}
-                      </div>
-                    ) : (
-                      <p className="text-muted mb-2">No streaming service information available.</p>
-                    )}
+                  {streaming.length > 0 ? (
+                    <div className="flex flex-wrap gap-3 m-2 items-center">
+                      {streaming.map((provider) => (
+                        <a
+                          key={provider.provider_name}
+                          href={provider.link} // Use the mapped link or TMDB fallback link
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <img
+                            src={`https://image.tmdb.org/t/p/w45${provider.logo_path}`}
+                            alt={provider.provider_name}
+                            title={provider.provider_name}
+                            className="h-6 w-6 object-contain mx-2"
+                          />
+                        </a>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-muted mb-2">No streaming service information available.</p>
+                  )}
                 </div>
                 <div className="mt-auto">
                   <strong>Trailer:</strong>
