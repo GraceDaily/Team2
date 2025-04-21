@@ -39,7 +39,7 @@ const TV = () => {
 
   // Add handler for poster click
   const handlePosterClick = (media) => {
-    setSelectedMedia(media);
+    setSelectedMedia({ ...media, media_type: "tv" });
     setShowModal(true);
   };
 
