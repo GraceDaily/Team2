@@ -19,28 +19,46 @@ const providerLinks = {
 const MediaDetails = ({ show, handleClose, media }) => {
   const [runtime, setRuntime] = useState(null);
   const [cast, setCast] = useState([]);
+  const [director, setDirector] = useState(null);
   const [streaming, setStreaming] = useState([]);
   const [trailerKey, setTrailerKey] = useState(null);
   const [addedToLibrary, setAddedToLibrary] = useState(null);
   const { addToLibrary } = useContext(LibraryContext);
   const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
 
-  const fetchRuntime = async () => {
+const fetchRuntime = async () => {
     if (!media) return;
     const type = media.media_type || "movie";
     const url = `https://api.themoviedb.org/3/${type}/${media.id}?api_key=${API_KEY}&language=en-US`;
+  
     try {
       const res = await fetch(url);
       const data = await res.json();
+  
       if (type === "movie") {
         setRuntime(data.runtime ? `${data.runtime}m` : "N/A");
       } else if (type === "tv") {
-        const avg = data.episode_run_time?.[0];
+        let avg = data.episode_run_time?.[0];
+        if (!avg && data.last_episode_to_air?.runtime) {
+            avg = data.last_episode_to_air.runtime;
+        }
         setRuntime(avg ? `${avg}m/episode` : "N/A");
       }
+  
+      if (type === "movie") {
+        const creditsUrl = `https://api.themoviedb.org/3/movie/${media.id}/credits?api_key=${API_KEY}&language=en-US`;
+        const creditsRes = await fetch(creditsUrl);
+        const creditsData = await creditsRes.json();
+        const dir = creditsData.crew?.find((person) => person.job === "Director");
+        setDirector(dir?.name || null);
+      } else if (type === "tv") {
+        const creators = data.created_by;
+        setDirector(creators?.length ? creators.map((c) => c.name).join(", ") : null);
+      }
     } catch (err) {
-      console.error("Error fetching runtime:", err);
+      console.error("Error fetching runtime or director/creator:", err);
       setRuntime("N/A");
+      setDirector(null);
     }
   };
 
@@ -53,7 +71,7 @@ const MediaDetails = ({ show, handleClose, media }) => {
       const data = await response.json();
       setCast(data.cast ? data.cast.slice(0, 4) : []);
     } catch (error) {
-      console.error("Error fetching cast:", error);
+      console.error("Error fetching cast and director:", error);
       setCast([]);
     }
   };
@@ -144,6 +162,12 @@ const MediaDetails = ({ show, handleClose, media }) => {
                   <>
                     <span>•</span>
                     <strong>{runtime}</strong>
+                  </>
+                )}
+                {director && (
+                  <>
+                    <span>•</span>
+                    <strong>{director}</strong>
                   </>
                 )}
               </div>
