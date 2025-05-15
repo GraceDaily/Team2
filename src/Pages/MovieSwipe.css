@@ -1,0 +1,53 @@
+@keyframes swipeLeft {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+}
+
+
+@keyframes swipeRight{
+    from{
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to{
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+
+.swipe-animation {
+    animation-duration: .5s;
+    animation-fill-mode: forwards;
+}
+
+
+.swipe-left{
+    animation-name: swipeLeft;
+}
+
+.swipe-right {
+    animation-name: swipeRight;
+  }
+
+  .media-details-modal .btn-close {
+    filter: invert(1);
+    opacity: 0.9;
+    transition: opacity 0.2s;
+  }
+  
+  .media-details-modal .btn-close:hover {
+    opacity: 1;
+    filter: invert(1) brightness(1.5);
+  }
+
+  .media-details-modal .modal-header .btn-close:focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }

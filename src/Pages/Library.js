@@ -1,9 +1,18 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { LibraryContext } from "../Components/LibraryContext";
 import { img_300, unavailable } from "../Components/config";
+import MediaDetails from "../Components/MediaDetails";
 
 const Library = () => {
   const { library, removeFromLibrary } = useContext(LibraryContext);
+  const [selectedMedia, setSelectedMedia] = useState(null); // State for selected media
+  const [showModal, setShowModal] = useState(false); // State for modal visibility
+
+  // Handler for poster click
+  const handlePosterClick = (media) => {
+    setSelectedMedia(media);
+    setShowModal(true);
+  };
 
   return (
     <>
@@ -27,6 +36,8 @@ const Library = () => {
                       }
                       className="card-img-top pt-3 pb-0 px-3"
                       alt={title || name}
+                      style={{ cursor: "pointer" }} // Add pointer cursor
+                      onClick={() => handlePosterClick(movie)} // Add click handler
                     />
                     <div className="card-body d-flex flex-column align-items-center">
                       <h5 className="card-title text-center fs-5">
@@ -46,6 +57,11 @@ const Library = () => {
           )}
         </div>
       </div>
+      <MediaDetails
+        show={showModal}
+        handleClose={() => setShowModal(false)}
+        media={selectedMedia}
+      />
     </>
   );
 };

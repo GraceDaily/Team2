@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext, useCallback } from "react";
 import Pagination from "../Components/Pagination";
 import { img_300, unavailable } from "../Components/config";
 import { LibraryContext } from "../Components/LibraryContext";
+import formatDate from "../Components/formatDate";
+import MediaDetails from "../Components/MediaDetails";
 const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
 
 
@@ -12,6 +14,8 @@ const Search = () => {
   const [content, setContent] = useState([]);
   const { addToLibrary } = useContext(LibraryContext); // Use the context
   const [addedToLibrary, setAddedToLibrary] = useState(null); // State to manage the added message
+  const [selectedMedia, setSelectedMedia] = useState(null); // Add state for selected media
+  const [showModal, setShowModal] = useState(false); // Add state for modal visibility
 
   const fetchSearch = useCallback(async () => {
     const data = await fetch(
@@ -37,6 +41,12 @@ const Search = () => {
     addToLibrary(movie);
     setAddedToLibrary(movie.id); // Set the added movie ID
     setTimeout(() => setAddedToLibrary(null), 2000); // Clear the message after 2 seconds
+  };
+
+  // Add handler for poster click
+  const handlePosterClick = (media) => {
+    setSelectedMedia(media);
+    setShowModal(true);
   };
   return (
     <>
@@ -84,6 +94,8 @@ const Search = () => {
                             : unavailable
                         }
                         alt={title}
+                        style={{ cursor: "pointer" }} // Add pointer cursor
+                        onClick={() => handlePosterClick(Val)} // Add click handler
                         className="card-img-top pt-3 pb-0 px-3"
                       />
                       <div className="card-body">
@@ -92,7 +104,7 @@ const Search = () => {
                         </h5>
                         <div className="d-flex fs-6 align-items-center justify-content-evenly movie">
                           <div>{media_type === "tv" ? "TV" : "Movie"}</div>
-                          <div>{first_air_date || release_date}</div>
+                          <div>{formatDate(first_air_date || release_date)}</div>
                         </div>
                       {/* Centered Button and Added Message */}
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '10px' }}>
@@ -115,6 +127,11 @@ const Search = () => {
           {page > 1 && <Pagination page={page} setPage={setPage} />}
         </div>
       </div>
+      <MediaDetails
+        show={showModal}
+        handleClose={() => setShowModal(false)}
+        media={selectedMedia}
+      />
     </>
   );
 };
